@@ -6,8 +6,6 @@
   [& args]
   (println "I'm a teapot!"))
 
-
-
 (defn multi-arity
     ;; 2-arity
   ([target, move]
@@ -53,24 +51,24 @@
 (inc3 10)
 
 (def asym-hobbit-body-parts [{:name "head" :size 3}
-                             {:name "left-eye" :size 1}
-                             {:name "left-ear" :size 1}
+                             {:name "eye" :size 1}
+                             {:name "ear" :size 1}
                              {:name "mouth" :size 1}
                              {:name "nose" :size 1}
                              {:name "neck" :size 2}
-                             {:name "left-shoulder" :size 3}
-                             {:name "left-upper-arm" :size 3}
+                             {:name "shoulder" :size 3}
+                             {:name "upper-arm" :size 3}
                              {:name "chest" :size 10}
                              {:name "back" :size 10}
-                             {:name "left-forearm" :size 3}
+                             {:name "forearm" :size 3}
                              {:name "abdomen" :size 6}
-                             {:name "left-kidney" :size 1}
-                             {:name "left-hand" :size 2}
-                             {:name "left-knee" :size 2}
-                             {:name "left-thigh" :size 4}
-                             {:name "left-lower-leg" :size 3}
-                             {:name "left-achilles" :size 1}
-                             {:name "left-foot" :size 2}])
+                             {:name "kidney" :size 1}
+                             {:name "hand" :size 2}
+                             {:name "knee" :size 2}
+                             {:name "thigh" :size 4}
+                             {:name "lower-leg" :size 3}
+                             {:name "achilles" :size 1}
+                             {:name "foot" :size 2}])
 
 (defn symmetrize-body-parts
   "Expects a seq of maps that have a :name and a :size"
@@ -122,7 +120,7 @@
       (if (> accumulated-size target)
         {:accumulated-size accumulated-size
          :target target
-         :part part}
+         :amount part}
         (recur remaining (+ accumulated-size (:size (first remaining))))))))
 (hit asym-hobbit-body-parts)
 
@@ -144,16 +142,46 @@
       (set (conj rst fn-rst))
       (recur res (fun (first res)) (conj rst fn-rst)))))
 
+(def asym-alien-body-parts [{:name "head" :size 3 :amount 2}
+                            {:name "eye" :size 1 :amount 10}
+                            {:name "ear" :size 1 :amount 2}
+                            {:name "mouth" :size 1 :amount 2}
+                            {:name "nose" :size 1 :amount 2}
+                            {:name "neck" :size 2 :amount 2}
+                            {:name "shoulder" :size 3 :amount 2}
+                            {:name "upper-arm" :size 3 :amount 2}
+                            {:name "chest" :size 10 :amount 2}
+                            {:name "back" :size 10 :amount 2}
+                            {:name "forearm" :size 3 :amount 2}
+                            {:name "abdomen" :size 6 :amount 2}
+                            {:name "kidney" :size 1 :amount 2}
+                            {:name "hand" :size 2 :amount 2}
+                            {:name "knee" :size 2 :amount 2}
+                            {:name "thigh" :size 4 :amount 2}
+                            {:name "lower-leg" :size 3 :amount 2}
+                            {:name "achilles" :size 1 :amount 2}
+                            {:name "foot" :size 2 :amount 4}])
 
-(defn matching-part
-  [part]
-  {:name (clojure.string/replace (:name part) #"^left-" "right-")
+(defn create-alien-part
+  [part num]
+  {:name (str (:name part) "-" (inc num))
    :size (:size part)})
-?
-(defn match-hobbit-parts [acc part]
-  (into acc
-        (set [part (matching-part part)])))
 
-(defn symmetrize-body-parts-reduce
+(defn matching-alien-part
+  [part]
+  (loop [i 0
+         result []]
+    (if (= i (:amount part))
+      result
+      (recur (inc i) (conj result (create-alien-part part i))))))
+
+(defn match-alien-parts
+  [acc part]
+  (into acc
+        (set (matching-alien-part part))))
+
+(defn symmetrize-alien-body-parts-reduce
   [asym-body-parts]
-  (reduce match-hobbit-parts [] asym-body-parts))
+  (reduce match-alien-parts [] asym-body-parts))
+
+(symmetrize-alien-body-parts-reduce asym-alien-body-parts)
