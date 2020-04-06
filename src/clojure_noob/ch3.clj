@@ -1,3 +1,6 @@
+(ns clojure-noob.ch3
+  (:gen-class))
+
 (defn multi-arity
     ;; 2-arity
   ([target, move]
@@ -28,8 +31,8 @@
    (println (str "Second choice: " snd-choice))
    (println (str "The rest: " (clojure.string/join ", " rest)))))
 
-(map (fn [name] (str "Hi, mate " name "!"))
-     ["Mate", "Mati", "Barney"])
+; (map (fn [name] (str "Hi, mate " name "!"))
+;      ["Mate", "Mati", "Barney"])
 
 ((fn [x] (* x 3)) 8)
 
@@ -40,7 +43,7 @@
 
 (def inc3 (inc-maker 3))
 
-(inc3 10)
+; (inc3 10)
 
 (def asym-hobbit-body-parts [{:name "head" :size 3}
                              {:name "eye" :size 1}
@@ -62,6 +65,12 @@
                              {:name "achilles" :size 1}
                              {:name "foot" :size 2}])
 
+
+(defn matching-part
+  [part]
+  {:name (clojure.string/replace (:name part) #"^left-" "right-")
+   :size (:size part)})
+
 (defn symmetrize-body-parts
   "Expects a seq of maps that have a :name and a :size"
   [asym-body-parts]
@@ -74,10 +83,6 @@
                      (set [part (matching-part part)])))))))
 
 
-(defn matching-part
-  [part]
-  {:name (clojure.string/replace (:name part) #"^left-" "right-")
-   :size (:size part)})
 
 (defn match-hobbit-parts [acc part]
   (into acc
@@ -176,4 +181,4 @@
   [asym-body-parts]
   (reduce match-alien-parts [] asym-body-parts))
 
-(symmetrize-alien-body-parts-reduce asym-alien-body-parts)
+; (symmetrize-alien-body-parts-reduce asym-alien-body-parts)
