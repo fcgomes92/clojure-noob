@@ -46,8 +46,9 @@
 
 (def identities
   [{:alias "Batman" :real "Bruce Wayne"}
-   {:alias "Spider-Man" :real "Peter Parker"}
-   {:alias "Santa" :real "Your mom"}
+   {:alias "Spider-Man" :real "Peter Parker"}])
+(def identities-2
+  [{:alias "Santa" :real "Your mom"}
    {:alias "Easter Bunny" :real "Your dad"}])
 
 (map :real identities)
@@ -66,4 +67,77 @@
         {:human 4.1
          :critter 3.9})
 
+(def food-journal
+  [{:month 1 :day 1 :human 5.3 :critter 2.3}
+   {:month 1 :day 2 :human 5.1 :critter 2.0}
+   {:month 2 :day 1 :human 4.9 :critter 2.1}
+   {:month 2 :day 2 :human 5.0 :critter 2.5}
+   {:month 3 :day 1 :human 4.2 :critter 3.3}
+   {:month 3 :day 2 :human 4.0 :critter 3.8}
+   {:month 4 :day 1 :human 3.7 :critter 3.9}
+   {:month 4 :day 2 :human 3.7 :critter 3.6}])
+
+(take-while #(< (:month %) 3) food-journal)
+(drop-while #(< (:month %) 3) food-journal)
+
+(filter #(< (:human %) 5) food-journal)
+(some #(> (:critter %) 5) food-journal)
+(some #(and (> (:critter %) 3) %) food-journal)
+
+(def vampire-database
+  {0 {:makes-blood-puns? false, :has-pulse? true  :name "McFishwich"}
+   1 {:makes-blood-puns? false, :has-pulse? true  :name "McMackson"}
+   2 {:makes-blood-puns? true,  :has-pulse? false :name "Damon Salvatore"}
+   3 {:makes-blood-puns? true,  :has-pulse? true  :name "Mickey Mouse"}})
+
+(defn vampire-related-details
+  [social-security-number]
+  (Thread/sleep 1000)
+  (get vampire-database social-security-number))
+
+(defn vampire?
+  [record]
+  (and (:makes-blood-puns? record)
+       (not (:has-pulse? record))
+       record))
+
+(defn identify-vampire
+  [social-security-numbers]
+  (first (filter vampire?
+                 (map vampire-related-details social-security-numbers))))
+
+(time (vampire-related-details 0))
+(time (def mapped-details (map vampire-related-details (range 0 1000000))))
+(time (first mapped-details))
+
+
+(concat (take 8 (repeat "na")) ["Batman!"])
+(take 3 (repeatedly (fn [] (rand-int 1000))))
+
+(defn even-number-generator
+    ([] (even-number-generator 0))
+    ([n] (cons n (lazy-seq (even-number-generator (+ n 2))))))
+
+(defn myrepeat
+    ([n] (cons n (lazy-seq (myrepeat n)))))
+(concat (take 8 (myrepeat "na")) ["Batman!"])
+
+(take 10 (even-number-generator))
 ;; exercise: implement map, filter, some using reduce
+; (defn map-reduce
+;   ([f coll] (seq (reduce #(conj %1 (f %2)) [] coll)))
+;   ([f coll & colls]
+;    (let [colls (cons coll colls)]
+;      (map-reduce (partial apply f)
+;                  (partition (count colls)
+;                             (apply interleave colls))))))
+; (defn reorder
+;     ([coll] (reduce #(cons %1 %2)))
+;     ([& [fst & rst]] (cons (reorder rst)))
+
+; (defn map-reduce
+;     ([f coll] (seq (reduce #(conj %1 (f %2)) [] coll)))
+;     ([f coll & colls]
+;      (let [colls (cons coll colls)]
+;        (map-reduce (partial apply f)
+;                    (reorder coll colls)))))
