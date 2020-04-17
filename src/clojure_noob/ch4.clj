@@ -123,6 +123,42 @@
 (concat (take 8 (myrepeat "na")) ["Batman!"])
 
 (take 10 (even-number-generator))
+
+(empty? [])
+(empty? {})
+
+(map identity {:sunlight-reaction "Glitter!"})
+(into {} (map identity {:sunlight-reaction "Glitter!"}))
+
+
+(into {:favorite-emotion "gloomy"} [[:sunlight-reaction "Glitter!"]])
+
+(max 1 2 3)
+(apply max [1 2 3])
+
+(defn my-into
+  [target additions]
+  (apply conj target additions))
+(my-into [1 2 3] [4])
+
+(def add15 (partial + 15))
+(add15 10)
+(add15 20)
+
+(def add-missing-elements (partial conj ["earth" "wind"]))
+(apply add-missing-elements ["fire"])
+
+(defn my-partial
+  [partialized-fn & args]
+  (fn [& more-args]
+    (apply partialized-fn (into args more-args))))
+
+(def add-missing-band (my-partial conj ["earth" "wind"]))
+(apply add-missing-band [["fire"]])console.log()
+
+(def add25 (my-partial + 20))
+(add25 3)
+
 ;; exercise: implement map, filter, some using reduce
 ; (defn map-reduce
 ;   ([f coll] (seq (reduce #(conj %1 (f %2)) [] coll)))
