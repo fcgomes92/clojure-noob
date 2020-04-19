@@ -154,7 +154,7 @@
     (apply partialized-fn (into args more-args))))
 
 (def add-missing-band (my-partial conj ["earth" "wind"]))
-(apply add-missing-band [["fire"]])console.log()
+(apply add-missing-band [["fire"]])
 
 (def add25 (my-partial + 20))
 (add25 3)
