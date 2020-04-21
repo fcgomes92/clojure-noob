@@ -2,7 +2,7 @@
   (:gen-class))
 
 (defn multi-arity
-    ;; 2-arity
+  ;; 2-arity
   ([target, move]
    (str "I " move " " target))
   ([target]
@@ -74,14 +74,14 @@
 (defn symmetrize-body-parts
   "Expects a seq of maps that have a :name and a :size"
   [asym-body-parts]
-  (loop [remaining-asym-parts asym-body-parts final-body-parts []]
+  (loop [remaining-asym-parts asym-body-parts
+         final-body-parts     []]
     (if (empty? remaining-asym-parts)
       final-body-parts
       (let [[part & remaining] remaining-asym-parts]
         (recur remaining
-               (into final-body-parts
-                     (set [part (matching-part part)])))))))
-
+          (into final-body-parts
+                (set [part (matching-part part)])))))))
 
 
 (defn match-hobbit-parts [acc part]
@@ -109,16 +109,17 @@
 
 (defn hit
   [asym-body-parts]
-  (let [sym-parts (symmetrize-body-parts-reduce asym-body-parts)
+  (let [sym-parts          (symmetrize-body-parts-reduce asym-body-parts)
         body-part-size-sum (reduce + 0 (map :size sym-parts))
-        target (rand body-part-size-sum)]
+        target             (rand body-part-size-sum)]
     (loop [[part & remaining] sym-parts
-           accumulated-size (:size part)]
+           accumulated-size   (:size part)]
       (if (> accumulated-size target)
         {:accumulated-size accumulated-size
-         :target target
-         :amount part}
+         :target           target
+         :amount           part}
         (recur remaining (+ accumulated-size (:size (first remaining))))))))
+
 (hit asym-hobbit-body-parts)
 
 ; Exercicies
@@ -133,8 +134,8 @@
 (defn mapset
   [fun values]
   (loop [[val & res] (set values)
-         fn-rst (fun val)
-         rst []]
+         fn-rst      (fun val)
+         rst         []]
     (if (empty? res)
       (set (conj rst fn-rst))
       (recur res (fun (first res)) (conj rst fn-rst)))))
@@ -166,7 +167,7 @@
 
 (defn matching-alien-part
   [part]
-  (loop [i 0
+  (loop [i      0
          result []]
     (if (= i (:amount part))
       result

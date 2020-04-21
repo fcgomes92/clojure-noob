@@ -11,8 +11,9 @@
 
 (map titleize #{"Elbows" "Soap Carving"})
 
-(map #(titleize (second %)) {:uncomfortable-thing "Winking"
-                             :comfortable-thing "Playing"})
+(map #(titleize (second %))
+     {:uncomfortable-thing "Winking"
+      :comfortable-thing   "Playing"})
 
 
 ;; seq is used to manage indirection (using Polymorphism) on
@@ -29,14 +30,17 @@
 
 (def human-consumption   [8.1 7.3 6.6 5.0])
 (def critter-consumption [0.0 0.2 0.3 1.1])
+
 (defn unify-diet-data
   [human critter]
-  {:human human
+  {:human   human
    :critter critter})
+
 (map unify-diet-data human-consumption critter-consumption)
 
-(def sum #(reduce +  %))
+(def sum #(reduce + %))
 (def avg #(/ (sum %) (count %)))
+
 (defn stats
   [numbers]
   (map #(% numbers) [sum count avg]))
@@ -53,19 +57,21 @@
 
 (map :real identities)
 
-(reduce (fn [new-map [key val]]
-          (assoc new-map key (inc val)))
-        {}
-        {:max 30 :min 10})
+(reduce
+  (fn [new-map [key val]]
+    (assoc new-map key (inc val)))
+  {}
+  {:max 30 :min 10})
 
 
-(reduce (fn [new-map [key val]]
-          (if (> val 4)
-            (assoc new-map key val)
-            new-map))
-        {}
-        {:human 4.1
-         :critter 3.9})
+(reduce
+  (fn [new-map [key val]]
+    (if (> val 4)
+      (assoc new-map key val)
+      new-map))
+  {}
+  {:human   4.1
+   :critter 3.9})
 
 (def food-journal
   [{:month 1 :day 1 :human 5.3 :critter 2.3}
@@ -78,17 +84,19 @@
    {:month 4 :day 2 :human 3.7 :critter 3.6}])
 
 (take-while #(< (:month %) 3) food-journal)
+
 (drop-while #(< (:month %) 3) food-journal)
 
 (filter #(< (:human %) 5) food-journal)
+
 (some #(> (:critter %) 5) food-journal)
 (some #(and (> (:critter %) 3) %) food-journal)
 
 (def vampire-database
-  {0 {:makes-blood-puns? false, :has-pulse? true  :name "McFishwich"}
-   1 {:makes-blood-puns? false, :has-pulse? true  :name "McMackson"}
-   2 {:makes-blood-puns? true,  :has-pulse? false :name "Damon Salvatore"}
-   3 {:makes-blood-puns? true,  :has-pulse? true  :name "Mickey Mouse"}})
+  {0 {:makes-blood-puns? false, :has-pulse? true :name "McFishwich"}
+   1 {:makes-blood-puns? false, :has-pulse? true :name "McMackson"}
+   2 {:makes-blood-puns? true, :has-pulse? false :name "Damon Salvatore"}
+   3 {:makes-blood-puns? true, :has-pulse? true :name "Mickey Mouse"}})
 
 (defn vampire-related-details
   [social-security-number]
@@ -103,8 +111,9 @@
 
 (defn identify-vampire
   [social-security-numbers]
-  (first (filter vampire?
-                 (map vampire-related-details social-security-numbers))))
+  (first
+    (filter vampire?
+            (map vampire-related-details social-security-numbers))))
 
 (time (vampire-related-details 0))
 (time (def mapped-details (map vampire-related-details (range 0 1000000))))
@@ -112,14 +121,16 @@
 
 
 (concat (take 8 (repeat "na")) ["Batman!"])
+
 (take 3 (repeatedly (fn [] (rand-int 1000))))
 
 (defn even-number-generator
-    ([] (even-number-generator 0))
-    ([n] (cons n (lazy-seq (even-number-generator (+ n 2))))))
+  ([] (even-number-generator 0))
+  ([n] (cons n (lazy-seq (even-number-generator (+ n 2))))))
 
 (defn myrepeat
-    ([n] (cons n (lazy-seq (myrepeat n)))))
+  ([n] (cons n (lazy-seq (myrepeat n)))))
+
 (concat (take 8 (myrepeat "na")) ["Batman!"])
 
 (take 10 (even-number-generator))
@@ -128,24 +139,29 @@
 (empty? {})
 
 (map identity {:sunlight-reaction "Glitter!"})
+
 (into {} (map identity {:sunlight-reaction "Glitter!"}))
 
 
 (into {:favorite-emotion "gloomy"} [[:sunlight-reaction "Glitter!"]])
 
 (max 1 2 3)
+
 (apply max [1 2 3])
 
 (defn my-into
   [target additions]
   (apply conj target additions))
+
 (my-into [1 2 3] [4])
 
 (def add15 (partial + 15))
+
 (add15 10)
 (add15 20)
 
 (def add-missing-elements (partial conj ["earth" "wind"]))
+
 (apply add-missing-elements ["fire"])
 
 (defn my-partial
@@ -154,9 +170,11 @@
     (apply partialized-fn (into args more-args))))
 
 (def add-missing-band (my-partial conj ["earth" "wind"]))
+
 (apply add-missing-band [["fire"]])
 
 (def add25 (my-partial + 20))
+
 (add25 3)
 
 ;; exercise: implement map, filter, some using reduce
