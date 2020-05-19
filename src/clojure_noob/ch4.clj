@@ -162,7 +162,7 @@
 
 (def add-missing-elements (partial conj ["earth" "wind"]))
 
-(apply add-missing-elements ["fire"])
+(apply add-missing-elements ["fire" "water"])
 
 (defn my-partial
   [partialized-fn & args]
