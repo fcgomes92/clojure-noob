@@ -163,7 +163,7 @@
   (let [needs (letters-needed total-lines)]
     (take needs letters)))
 
-(def pos-chars 3)
+(def pos-chars 4)
 
 (def ansi-styles
   {:red "[31m"
@@ -179,12 +179,18 @@
   [text color]
   (str (ansi color) text (ansi :reset)))
 
-(defn render-pos
+(defn render-place
   [board pos]
   (str (nth (list-letters (:rows board)) (dec pos))
        (if (get-in board [pos :pegged])
-         (colorize "0" :blue)
+         (colorize "+" :blue)
          (colorize "-" :red))))
+
+(defn render-pos
+  [board pos]
+  (let [place (render-place board pos)
+        size (- (count place) 8)]
+    (str "[" (apply str (take (- 5 size) (repeat " "))) place "]")))
 
 (defn row-positions
   "Return all positions in the given row"
@@ -212,10 +218,16 @@
 ;; Player interaction
 
 ;; TODO: fix this function in case where we have letters and numbers
+(defn get-letter-muiltipl
+  [letter]
+  (let [multipl (clojure.string/join (rest letter))]
+    (if (= multipl "")
+      0
+      (Integer/parseInt multipl))))
 (defn letter->pos
   "converts a letter string to hte corresponding position number"
   [letter]
-  (inc (- (int (first letter)) alpha-start)))
+  (inc (+ (- (int (first letter)) alpha-start) (* total-letters (get-letter-muiltipl letter)))))
 
 (defn get-input
   "Waits for user to enter text and hit enter, then cleans the input"
@@ -277,9 +289,15 @@
   (println "Remove which peg? [e]")
   (prompt-move (remove-peg board (letter->pos (get-input "e")))))
 
+
+
 (defn prompt-rows
   []
   (println "How many rows? [5]")
   (let [rows (Integer. (get-input 5))
         board (new-board rows)]
-    (prompt-empty-peg board)))
+    (if (<= rows 15)
+      (prompt-empty-peg board)
+      (do
+        (println "Max rows: 15")
+        (prompt-rows)))))
