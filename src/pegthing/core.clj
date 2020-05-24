@@ -217,13 +217,13 @@
 
 ;; Player interaction
 
-;; TODO: fix this function in case where we have letters and numbers
 (defn get-letter-muiltipl
   [letter]
   (let [multipl (clojure.string/join (rest letter))]
     (if (= multipl "")
       0
       (Integer/parseInt multipl))))
+ 
 (defn letter->pos
   "converts a letter string to hte corresponding position number"
   [letter]
