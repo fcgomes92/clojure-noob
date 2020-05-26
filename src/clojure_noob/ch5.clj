@@ -51,3 +51,12 @@
 
 
 ((comp inc *) 2 3)
+
+;; Exercises
+
+(defn attr
+  [character fn]
+  ((comp fn :attributes) character))
+; (attr character :intelligence)
+; (attr character :strength)
+
