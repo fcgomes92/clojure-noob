@@ -60,3 +60,9 @@
 ; (attr character :intelligence)
 ; (attr character :strength)
 
+
+(defn my-assoc-in
+  [m [k & ks] v]
+  (assoc m k ))
+
+(my-assoc-in {:a {:c "c"}} [:a :b] "a")
